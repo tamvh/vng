@@ -1,0 +1,42 @@
+{
+    "name" : "vng.iot.services.ble.advettise",
+    "synchronize": {
+        "events": 256,
+        "timeout": 1000
+    },
+    "settings": {
+        "net": {
+            "channel": {
+                "address": {
+                    "host": "tcp://localhost",
+                    "port": 1883
+                },
+                "type": "PAHO",
+                "settings": {
+                    "id": "services.ble.advertise"
+                }
+            }
+        },
+        "advertise": {
+            "topic": "iot.services.ble.advertise",
+            "ble": {
+                "protocol": {
+                    "type": "SLIP"
+                },
+                "device": {
+                    "type": "SERIAL",
+                    "path": "/dev/ttyUSB1",
+                    "settings": {
+                        "baudrate": 115200,
+                        "xonxoff": false,
+                        "rtscts": false,
+                        "parity": "none",
+                        "bytesize": 8,
+                        "stopbits": "one",
+                        "flowcontrol": "none"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,32 @@
+{
+    "name" : "vng.iot.services.light",
+    "synchronize": {
+        "events": 256,
+        "timeout": 20
+    },
+    "settings": {
+        "net": {
+            "channel": {
+                "address": {
+                    "host": "localhost",
+                    "port": 1883
+                },
+                "type": "PAHO",
+                "settings": {
+                    "id": "services.light.button"
+                }
+            }
+        },
+        "light": {
+            "scan": {
+                "topic": "iot.services.ble.receive"
+            },
+            "advertise": {
+                "topic": "iot.services.ble.advertise"
+            },
+            "devices": [
+                "31:10:14:92:47:C7"
+            ]
+        }
+    }
+}

@@ -1,0 +1,19 @@
+#!/bin/sh /etc/rc.common
+
+START=99
+STOP=10
+
+USE_PROCD=1
+
+SERVICE_BINNAME=vng.iot.services.light.sensor
+
+SERVICE_COMMAND=/bin/"$SERVICE_BINNAME"
+
+start_service() {
+    logger -t "$SERVICE_BINNAME" "Starting light sensor service"
+    procd_open_instance
+    procd_set_param command "$SERVICE_COMMAND"
+    procd_set_param respawn 3600 10 0
+    procd_close_instance
+}
+

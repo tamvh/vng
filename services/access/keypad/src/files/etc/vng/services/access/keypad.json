@@ -1,0 +1,30 @@
+{
+    "name" : "vng.iot.services.light.keypad",
+    "synchronize": {
+        "events": 256,
+        "timeout": 20
+    },
+    "settings": {
+        "net": {
+            "channel": {
+                "address": {
+                    "host": "localhost",
+                    "port": 1883
+                },
+                "type": "PAHO",
+                "settings": {
+                    "id": "services.access.keypad"
+                }
+            }
+        },
+        "keypad": {
+            "scan": {
+                "topic": "iot.services.ble.receive"
+            },
+            "advertise": {
+                "topic": "iot.services.ble.advertise"
+            },
+            "password": "15963"
+        }
+    }
+}

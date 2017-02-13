@@ -1,0 +1,30 @@
+{
+    "name" : "iot.light.sensor",
+    "synchronize": {
+        "events": 256,
+        "timeout": 10
+    },
+    "settings": {
+        "net": {
+            "channel": {
+                "address": {
+                    "host": "localhost",
+                    "port": 1883
+                },
+                "type": "PAHO",
+                "settings": {
+                    "id":  "iot.light.sensor"
+                }
+            }
+        },
+        "receive": {
+            "sub": "iot.services.ble.receive"
+        },
+        "cloud": {
+            "type" : "zcloud",
+            "apiUrl": "http://61.28.226.249:9090/api",
+            "apikey": "dae9fa9c-c019-11e6-968c-fa163e98bacf",
+            "token": "jwt.eyJpc0FjdGl2YXRlZCI6MX0=.u2%24hOX4XsFt9AkQQOeuj14RZ_ytKcfYIOnvneD26ik_zW0="
+        }
+    }
+}

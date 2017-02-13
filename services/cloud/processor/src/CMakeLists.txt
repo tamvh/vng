@@ -1,0 +1,50 @@
+#*******************************************************************************
+#  Copyright (c) 2016 VNG Corp. iot lab
+# 
+#  Contributors:
+#     Trung Bui Quang(trungbq#@vng.com.vn) - initial version
+#*******************************************************************************/
+
+# Note: on OS X you should install XCode and the associated command-line tools
+SET(PROJECT_NAME "vng.iot.services.cloud.processor")
+PROJECT("${PROJECT_NAME}" CXX)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
+
+## build settings
+SET(VNGIOTSERVICESCLOUDPROCESSOR_VERSION_MAJOR 1)
+SET(VNGIOTSERVICESCLOUDPROCESSOR_VERSION_MINOR 0)
+SET(VNGIOTSERVICESCLOUDPROCESSOR_VERSION_PATCH 0)
+SET(VNGIOTSERVICESCLOUDPROCESSOR_VERSION ${VNGIOTSERVICESCLOUDPROCESSOR_VERSION_MAJOR}.${VNGIOTSERVICESCLOUDPROCESSOR_VERSION_MINOR}.${VNGIOTSERVICESCLOUDPROCESSOR_VERSION_PATCH})
+
+EXECUTE_PROCESS(COMMAND date -u OUTPUT_VARIABLE BUILD_TIMESTAMP)
+STRING(STRIP ${BUILD_TIMESTAMP} BUILD_TIMESTAMP)
+
+## build options
+SET(VNGIOTSERVICESCLOUDPROCESSOR_WITH_SSL FALSE CACHE BOOL "Flag that defines whether to build ssl-enabled binaries too. ")
+SET(VNGIOTSERVICESCLOUDPROCESSOR_BUILD_DOCUMENTATION FALSE CACHE BOOL "Create and install the HTML based API documentation (requires Doxygen)")
+SET(VNGIOTSERVICESCLOUDPROCESSOR_BUILD_SAMPLES FALSE CACHE BOOL "Build access serices")
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+add_definitions(-std=c++11)
+add_definitions(-DUSE_EPOLL -DUSE_LIBJSONC -DWITH_POSIX -DDEBUG_PRINT)
+add_executable("${PROJECT_NAME}"
+               application.cpp
+               main.cpp
+               cloud/iotcloud.cpp
+               cloud/cloudprocesscommand.cpp
+               cloud/addressconvertutils.cpp)
+SET_TARGET_PROPERTIES("${PROJECT_NAME}" PROPERTIES COMPILE_FLAGS "-I$ENV{STAGING_DIR}/usr/include/vng/iot/sdk")
+TARGET_LINK_LIBRARIES("${PROJECT_NAME}" vng.iot.sdk curl paho-mqtt3c)
+SET(CPACK_PACKAGE_VERSION_MAJOR ${VNGIOTSERVICESCLOUDPROCESSOR_VERSION_MAJOR})
+SET(CPACK_PACKAGE_VERSION_MINOR ${VNGIOTSERVICESCLOUDPROCESSOR_VERSION_MINOR})
+SET(CPACK_PACKAGE_VERSION_PATCH ${VNGIOTSERVICESCLOUDPROCESSOR_VERSION_PATCH})
+SET_TARGET_PROPERTIES("${PROJECT_NAME}"
+	PROPERTIES
+        VERSION ${VNGIOTSERVICESCLOUDPROCESSOR_VERSION}
+        SOVERSION ${VNGIOTSERVICESCLOUDPROCESSOR_VERSION_MAJOR})
+    
+INSTALL(TARGETS "${PROJECT_NAME}"
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib)
+
+INCLUDE(CPack)

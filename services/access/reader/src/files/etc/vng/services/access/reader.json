@@ -1,0 +1,42 @@
+{
+    "name" : "vng.iot.services.access.reader",
+    "synchronize": {
+        "events": 256,
+        "timeout": 1000
+    },
+    "settings": {
+        "net": {
+            "channel": {
+                "address": {
+                    "host": "tcp://localhost",
+                    "port": 1883
+                },
+                "type": "PAHO",
+                "settings": {
+                    "id": "services.access.reader"
+                }
+            }
+        },
+        "access": {
+            "scan": {
+                "topic": "iot.services.ble.receive"
+            },
+            "advertise": {
+                "topic": "iot.services.ble.advertise"
+            },
+            "ids": [
+                "04:30:8F:DA:FA:43:80"
+            ]
+        },
+        "cloud": {
+            "api_url": "http://gbc.zing.vn/cloud/api/iot?",
+            "getway_id": "gateway1",
+            "mqtt": {
+                "address": {
+                    "host": "tcp://gbc.zing.vn",
+                    "port": 1883
+                }
+            }
+        }
+    }
+}
