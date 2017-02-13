@@ -43,8 +43,7 @@ void int_mqtt() {
     mqtt->connect();
 }
 void post_to_mqtt(const char * buffer_payload) {
-    std::string msg(buffer_payload);
-    msg = "fffffff";
+    std::string msg(buffer_payload, sizeof(buffer_payload));
     mqtt->publish(mqtt_topic, msg);
 }
 
@@ -70,10 +69,10 @@ int Callback(CoapPDU *request, int sockfd, struct sockaddr_storage *recvFrom) {
             // makes no sense, send RST
         break;
         case CoapPDU::COAP_GET:
+            post_to_mqtt(buffer_payload);
             response->setCode(CoapPDU::COAP_CONTENT);
             response->setContentFormat(CoapPDU::COAP_CONTENT_FORMAT_TEXT_PLAIN);
-            response->setPayload((uint8_t*)payload,strlen(payload));
-            post_to_mqtt(buffer_payload);
+            response->setPayload((uint8_t*)payload,strlen(payload));            
         break;
         case CoapPDU::COAP_POST:
             response->setCode(CoapPDU::COAP_CREATED);
