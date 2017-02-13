@@ -16,6 +16,15 @@
 #include "cantcoap/uthash.h"
 #include "zmqtt.h"
 
+ZMqtt * mqtt;
+std::string mqtt_topic = "gateway.esp32";
+std::string mqtt_clientId = "";
+std::string mqtt_host = "192.168.2.162";
+unsigned short mqtt_port = 1883;
+
+char *coap_host = (char*)"192.168.2.1";
+char *coap_port = (char*)"5683";
+
 typedef int (*ResourceCallback)(CoapPDU *pdu, int sockfd, struct sockaddr_storage *recvFrom);
 
 // using uthash for the URI hash table. Each entry contains a callback handler.
@@ -26,19 +35,17 @@ struct URIHashEntry {
     UT_hash_handle hh;
 };
 
-void post_to_mqtt(const char * buffer_payload) {
-    ZMqtt * mqtt;
-    std::string clientId = "";
-    std::string host = "192.168.2.1";
-    unsigned short port = 1883;
-    std::string topic = "gateway.esp32";
-    mqtt = new ZMqtt(clientId, host, port);
-    mqtt->preSubscribe(topic, 0);
+void int_mqtt() {
+    mqtt = new ZMqtt(mqtt_clientId, mqtt_host, mqtt_port);
+    mqtt->preSubscribe(mqtt_topic, 0);
     mqtt->autoReconnect(true);
     mqtt->beginConnect();
     mqtt->connect();
+}
+void post_to_mqtt(const char * buffer_payload) {
     std::string msg(buffer_payload);
-    mqtt->publish(topic, msg);
+    msg = "fffffff";
+    mqtt->publish(mqtt_topic, msg);
 }
 
 // callback functions defined here
@@ -139,15 +146,13 @@ const int gNumResources = 1;
 // for mbed compatibility
 #define failGracefully exit
 
-int main(int argc, char **argv) {
-    char *listenAddressString = (char*)"192.168.2.1";
-    char *listenPortString    = (char*)"5683";
-
+int main(int argc, char **argv) {   
+    int_mqtt();
     // setup bind address
     struct addrinfo *bindAddr;
     INFO("Setting up bind address");
     nethelper *_net = new nethelper();
-    int ret = _net->setupAddress(listenAddressString,listenPortString,&bindAddr,SOCK_DGRAM,AF_INET);
+    int ret = _net->setupAddress(coap_host,coap_port,&bindAddr,SOCK_DGRAM,AF_INET);
     if(ret!=0) {
         INFO("Error setting up bind address, exiting.");
         return -1;
